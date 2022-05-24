@@ -30,7 +30,7 @@
           <q-item-section> Profile</q-item-section>
         </q-item>
 
-        <q-item clickable v-ripple to="/settings">
+        <q-item clickable v-ripple to="/">
           <q-item-section avatar>
             <q-icon name="manage_accounts" />
           </q-item-section>
@@ -73,13 +73,10 @@ export default {
       drawer: ref(false),
     };
   },
-  // data() {
-  //   return {
-  //     pageRoutes: {
-  //       settings: "/settings",
-  //       dashboard: "/dashboard",
-  //     },
-  //   };
+  // methods: {
+  //   removeUser() {
+  //     console.log("logout");
+  //   },
   // },
 };
 </script>
