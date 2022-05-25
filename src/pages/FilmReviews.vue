@@ -58,7 +58,7 @@
           <p>
             {{ categoryOfMovies }}
             <span v-if="tabInput === 4"> year {{ year }} </span>
-          </p>
+          </p>         
         </div>
 
         <div v-for="res in resultQuery" :key="res.id">
@@ -107,13 +107,16 @@ export default {
         "/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&",
       bestMovies:
         "/discover/movie?primary_release_year=2020&sort_by=vote_average.desc&",
+
       year: "",
+
       yearBest1: "/discover/movie?primary_release_year=",
       yearBest2: "&sort_by=vote_average.desc&",
       selectedLink:
         "https://api.themoviedb.org/4/discover/movie?sort_by=popularity.desc&api_key=cc9258a8e7cdd13082a808f2da68d5ad",
     };
   },
+
   computed: {
     resultQuery() {
       if (this.searchQuery) {
