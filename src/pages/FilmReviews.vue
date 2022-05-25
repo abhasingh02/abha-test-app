@@ -61,10 +61,7 @@
       </div>
       <div v-if="responseAvailable == true">
         <div class="text-h6 text-center">
-          <p>
-            {{ categoryOfMovies }}
-            <span v-if="tabInput === 4"> year {{ year }} </span>
-          </p>         
+          <p v-if="tabInput === 4">Hit movies in year {{ year }}</p>
         </div>
 
         <div v-for="res in resultQuery" :key="res.id">
