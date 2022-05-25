@@ -55,7 +55,10 @@
       </div>
       <div v-if="responseAvailable == true">
         <div class="text-h6 text-center">
-          <p>{{ categoryOfMovies }}</p>
+          <p>
+            {{ categoryOfMovies }}
+            <span v-if="tabInput === 4"> year {{ year }} </span>
+          </p>
         </div>
 
         <div v-for="res in resultQuery" :key="res.id">
@@ -104,6 +107,7 @@ export default {
         "/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&",
       bestMovies:
         "/discover/movie?primary_release_year=2020&sort_by=vote_average.desc&",
+      year: "",
       yearBest1: "/discover/movie?primary_release_year=",
       yearBest2: "&sort_by=vote_average.desc&",
       selectedLink:
@@ -168,7 +172,7 @@ export default {
         }
         if (tabInput == 4) {
           this.selectedLink = this.url + this.kidsMovie + this.apiKey;
-          this.categoryOfMovies = "Year wise hit movies";
+          this.categoryOfMovies = "Hit movies in ";
         }
         console.log("tab input value= ", this.tabInput);
         this.callApi();
@@ -185,12 +189,14 @@ export default {
       // console.log(selMovie.original_title);
     },
     selectedYear(no) {
-      const year = no + 2010;
-      // console.log(year);
-      this.selectedLink =
-        this.url + this.yearBest1 + year + this.yearBest2 + this.apiKey;
-      this.callApi();
-      return this.selectedLink;
+      if (no != this.year - 2010) {
+        this.year = no + 2010;
+        // console.log(year);
+        this.selectedLink =
+          this.url + this.yearBest1 + this.year + this.yearBest2 + this.apiKey;
+        this.callApi();
+        return this.selectedLink;
+      }
     },
   },
 };
