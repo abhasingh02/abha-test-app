@@ -32,10 +32,32 @@
           label="Kids movie"
           class="col"
           @click="selectLink(3)"
-        ></q-btn>
+        />
+        <q-btn-dropdown
+          :color="tabInput == 4 ? 'teal' : 'primary'"
+          @click="selectLink(4)"
+          label="Yearwise hit movies"
+        >
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              v-for="i in 12"
+              :key="i"
+              @click="selectedYear(i)"
+            >
+              <q-item-section>
+                <q-item-label>{{ i + 2010 }} </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </div>
       <div v-if="responseAvailable == true">
-        <div class="text-h6 text-center">{{ categoryOfMovies }}</div>
+        <div class="text-h6 text-center">
+          <p>{{ categoryOfMovies }}</p>
+        </div>
+
         <div v-for="res in resultQuery" :key="res.id">
           <q-card @click="clicked(res)" class="my-card" bordered>
             <q-card-section horizontal>
@@ -58,7 +80,6 @@
 <script>
 import customHeader from "src/components/customHeader.vue";
 // import { version } from "vue";
-
 export default {
   components: { customHeader },
   data() {
@@ -83,12 +104,11 @@ export default {
         "/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&",
       bestMovies:
         "/discover/movie?primary_release_year=2020&sort_by=vote_average.desc&",
+      yearBest1: "/discover/movie?primary_release_year=",
+      yearBest2: "&sort_by=vote_average.desc&",
       selectedLink:
         "https://api.themoviedb.org/4/discover/movie?sort_by=popularity.desc&api_key=cc9258a8e7cdd13082a808f2da68d5ad",
     };
-  },
-  watch: {
-    selectedLink: function (val) {},
   },
   computed: {
     resultQuery() {
@@ -105,8 +125,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.tabInput);
-    // console.log(version);
+    // console.log(this.tabInput);
     this.callApi();
   },
   methods: {
@@ -147,6 +166,10 @@ export default {
           this.selectedLink = this.url + this.kidsMovie + this.apiKey;
           this.categoryOfMovies = "Kids Movies";
         }
+        if (tabInput == 4) {
+          this.selectedLink = this.url + this.kidsMovie + this.apiKey;
+          this.categoryOfMovies = "Year wise hit movies";
+        }
         console.log("tab input value= ", this.tabInput);
         this.callApi();
         return this.selectedLink;
@@ -160,6 +183,14 @@ export default {
         params: { data: sendData },
       });
       // console.log(selMovie.original_title);
+    },
+    selectedYear(no) {
+      const year = no + 2010;
+      // console.log(year);
+      this.selectedLink =
+        this.url + this.yearBest1 + year + this.yearBest2 + this.apiKey;
+      this.callApi();
+      return this.selectedLink;
     },
   },
 };

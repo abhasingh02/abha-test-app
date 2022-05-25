@@ -59,13 +59,9 @@ export default {
       if (this.oldUser == true) {
         //existed user
         this.oldUser = false;
-        this.$router.push({
-          name: "dashboard",
-          // params: { username: this.savedLoginUser.name },
-        });
+        this.$router.push("/dashboard");
       } else {
         this.newUser = true; //new user
-        // this.$router.push("/registration");
       }
     },
   },
