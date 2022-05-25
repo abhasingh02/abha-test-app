@@ -33,13 +33,6 @@
           class="col"
           @click="selectLink(3)"
         />
-        <!-- <q-btn
-          :color="tabInput == 4 ? 'teal' : 'primary'"
-          label="Yearwise hit movies"
-          class="col"
-          @click="selectLink(4)"
-        /> -->
-        <!-- <div class="q-pa-md"> -->
         <q-btn-dropdown
           :color="tabInput == 4 ? 'teal' : 'primary'"
           @click="selectLink(4)"
@@ -62,7 +55,10 @@
       </div>
       <div v-if="responseAvailable == true">
         <div class="text-h6 text-center">
-          <p>{{ categoryOfMovies }}</p>
+          <p>
+            {{ categoryOfMovies }}
+            <span v-if="tabInput === 4"> year {{ year }} </span>
+          </p>         
         </div>
 
         <div v-for="res in resultQuery" :key="res.id">
@@ -87,7 +83,6 @@
 <script>
 import customHeader from "src/components/customHeader.vue";
 // import { version } from "vue";
-
 export default {
   components: { customHeader },
   data() {
@@ -112,6 +107,9 @@ export default {
         "/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&",
       bestMovies:
         "/discover/movie?primary_release_year=2020&sort_by=vote_average.desc&",
+
+      year: "",
+
       yearBest1: "/discover/movie?primary_release_year=",
       yearBest2: "&sort_by=vote_average.desc&",
       selectedLink:
@@ -177,7 +175,7 @@ export default {
         }
         if (tabInput == 4) {
           this.selectedLink = this.url + this.kidsMovie + this.apiKey;
-          this.categoryOfMovies = "Year wise hit movies";
+          this.categoryOfMovies = "Hit movies in ";
         }
         console.log("tab input value= ", this.tabInput);
         this.callApi();
@@ -194,12 +192,14 @@ export default {
       // console.log(selMovie.original_title);
     },
     selectedYear(no) {
-      const year = no + 2010;
-      // console.log(year);
-      this.selectedLink =
-        this.url + this.yearBest1 + year + this.yearBest2 + this.apiKey;
-      this.callApi();
-      return this.selectedLink;
+      if (no != this.year - 2010) {
+        this.year = no + 2010;
+        // console.log(year);
+        this.selectedLink =
+          this.url + this.yearBest1 + this.year + this.yearBest2 + this.apiKey;
+        this.callApi();
+        return this.selectedLink;
+      }
     },
   },
 };

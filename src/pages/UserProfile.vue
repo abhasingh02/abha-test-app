@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf">
     <custom-header
-      header-title="details"
+      header-title="User Details"
       routeName="Back"
       routePath="/dashboard"
     ></custom-header>
