@@ -30,13 +30,13 @@
           <q-item-section> Profile</q-item-section>
         </q-item>
 
-        <q-item clickable v-ripple to="/">
+        <q-item clickable v-ripple to="/settings">
           <q-item-section avatar>
             <q-icon name="manage_accounts" />
           </q-item-section>
           <q-item-section> Manage Accounts </q-item-section>
         </q-item>
-        <q-item clickable v-ripple to="/">
+        <q-item clickable v-ripple @click="removeUser">
           <q-item-section avatar>
             <q-icon name="logout" />
           </q-item-section>
@@ -73,11 +73,13 @@ export default {
       drawer: ref(false),
     };
   },
-  // methods: {
-  //   removeUser() {
-  //     console.log("logout");
-  //   },
-  // },
+  methods: {
+    removeUser() {
+      localStorage.setItem("loginUser", JSON.stringify(this.loginUser));
+      this.$router.push("/");
+      console.log("logout");
+    },
+  },
 };
 </script>
 
