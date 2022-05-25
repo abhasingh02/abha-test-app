@@ -16,6 +16,12 @@
       ></q-input>
       <div class="q-pa-md q-gutter-sm">
         <q-btn
+          :color="tabInput == 0 ? 'teal' : 'primary'"
+          label="All movies"
+          class="col"
+          @click="selectLink(0)"
+        />
+        <q-btn
           :color="tabInput == 1 ? 'teal' : 'primary'"
           label="Popular movies"
           class="col"
@@ -96,7 +102,6 @@ export default {
       tabInput: 0,
       articleId: "",
       search: "",
-      categoryOfMovies: "",
       options: { method: "GET", url: null },
       url: "https://api.themoviedb.org/4",
       apiKey: "api_key=cc9258a8e7cdd13082a808f2da68d5ad",
@@ -111,7 +116,7 @@ export default {
       yearBest1: "/discover/movie?primary_release_year=",
       yearBest2: "&sort_by=vote_average.desc&",
       selectedLink:
-        "https://api.themoviedb.org/4/discover/movie?sort_by=popularity.desc&api_key=cc9258a8e7cdd13082a808f2da68d5ad",
+        "https://api.themoviedb.org/4/list/1?api_key=cc9258a8e7cdd13082a808f2da68d5ad",
     };
   },
   computed: {
@@ -129,7 +134,6 @@ export default {
     },
   },
   mounted() {
-    // console.log(this.tabInput);
     this.callApi();
   },
   methods: {
@@ -156,23 +160,18 @@ export default {
         this.tabInput = tabInput;
         if (tabInput == 0) {
           this.selectedLink = this.url + this.listLink + this.apiKey;
-          this.categoryOfMovies = "";
         }
         if (tabInput == 1) {
           this.selectedLink = this.url + this.popularMovieAPI + this.apiKey;
-          this.categoryOfMovies = "Popular Movies";
         }
         if (tabInput == 2) {
           this.selectedLink = this.url + this.bestMovies + this.apiKey;
-          this.categoryOfMovies = "High Rated Movies Movies";
         }
         if (tabInput == 3) {
           this.selectedLink = this.url + this.kidsMovie + this.apiKey;
-          this.categoryOfMovies = "Kids Movies";
         }
         if (tabInput == 4) {
           this.selectedLink = this.url + this.kidsMovie + this.apiKey;
-          this.categoryOfMovies = "Hit movies in ";
         }
         console.log("tab input value= ", this.tabInput);
         this.callApi();
