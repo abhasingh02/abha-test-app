@@ -71,7 +71,7 @@
       </div>
       <div v-if="responseAvailable == true">
         <div class="text-h6 text-center">
-          <p v-if="tabInput === 4">Hit movies in year {{ year }}</p>
+          <p v-if="tabInput === 4">Hit movies in year {{ selYear }}</p>
         </div>
 
         <div v-for="res in resultQuery" :key="res.id">
@@ -101,7 +101,6 @@ import customHeader from "src/components/customHeader.vue";
 export default {
   mixins: [APILinks],
   components: { customHeader },
-
   data() {
     return {
       searchQuery: null,
@@ -119,9 +118,15 @@ export default {
         $store.commit("appstore/selectedTab", val);
       },
     });
-
+    const selYear = computed({
+      get: () => $store.state.appstore.year,
+      set: (val) => {
+        $store.commit("appstore/updateYear", val);
+      },
+    });
     return {
       tabInput,
+      selYear,
     };
   },
   computed: {
@@ -139,15 +144,15 @@ export default {
     },
   },
   mounted() {
-    this.callApi();
+    this.callApi(this.setLink(this.tabInput, this.selYear));
     console.log(this.tabInput);
   },
   methods: {
-    callApi() {
+    callApi(link) {
       var axios = require("axios").default;
       this.options = {
         method: "GET",
-        url: this.selectedLink,
+        url: link,
       };
       axios
         .request(this.options)
@@ -161,26 +166,17 @@ export default {
           console.error(error);
         });
     },
-    selectLink(tabInput) {
-      if (this.tabInput != tabInput) {
-        this.tabInput = tabInput;
-        if (tabInput == 0) {
-          this.selectedLink = this.url + this.listLink + this.apiKey;
-        }
-        if (tabInput == 1) {
-          this.selectedLink = this.url + this.popularMovieAPI + this.apiKey;
-        }
-        if (tabInput == 2) {
-          this.selectedLink = this.url + this.bestMovies + this.apiKey;
-        }
-        if (tabInput == 3) {
-          this.selectedLink = this.url + this.kidsMovie + this.apiKey;
-        }
-        if (tabInput == 4) {
-          this.selectedLink = this.url + this.kidsMovie + this.apiKey;
-        }
-        this.callApi();
-        return this.selectedLink;
+    selectLink(tabIn) {
+      if (this.tabInput != tabIn) {
+        this.tabInput = tabIn; //change in store
+        this.callApi(this.setLink(tabIn));
+        // return this.selectedLink;
+      }
+    },
+    selectedYear(selYear) {
+      if (this.selYear - 2010 != selYear) {
+        this.selYear = selYear + 2010; //change in store
+        this.callApi(this.setLink(4, this.selYear));
       }
     },
     clicked(selMovie) {
@@ -191,16 +187,6 @@ export default {
         params: { data: sendData },
       });
       // console.log(selMovie.original_title);
-    },
-    selectedYear(no) {
-      if (no != this.year - 2010) {
-        this.year = no + 2010;
-        // console.log(year);
-        this.selectedLink =
-          this.url + this.yearBest1 + this.year + this.yearBest2 + this.apiKey;
-        this.callApi();
-        return this.selectedLink;
-      }
     },
   },
 };

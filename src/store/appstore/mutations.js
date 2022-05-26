@@ -3,7 +3,9 @@
 // }
 
 export function selectedTab(state, tabId) {
-  console.log(state);
   console.log(tabId);
   state.tabSelected = tabId;
+}
+export function updateYear(state, selectedYear) {
+  state.year = selectedYear;
 }
