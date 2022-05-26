@@ -19,4 +19,5 @@ export default {
         "https://api.themoviedb.org/4/list/1?api_key=cc9258a8e7cdd13082a808f2da68d5ad",
     };
   },
+  methods() {},
 };

@@ -77,7 +77,6 @@ export default {
     removeUser() {
       localStorage.setItem("loginUser", JSON.stringify(this.loginUser));
       this.$router.push("/");
-      console.log("logout");
     },
   },
 };

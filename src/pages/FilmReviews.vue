@@ -95,25 +95,35 @@
 
 <script>
 import APILinks from "../mixins/APILinks";
+import { computed } from "vue";
+import { useStore } from "vuex";
 import customHeader from "src/components/customHeader.vue";
 export default {
   mixins: [APILinks],
   components: { customHeader },
+
   data() {
     return {
-      fname: "",
-      sname: "",
       searchQuery: null,
-      searchQuery2: null,
       resources: "",
       responseAvailable: false,
-      tabInput: 0,
-      articleId: "",
       search: "",
-      options: { method: "GET", url: null },
+      options: "",
     };
   },
+  setup() {
+    const $store = useStore();
+    const tabInput = computed({
+      get: () => $store.state.appstore.tabSelected,
+      set: (val) => {
+        $store.commit("appstore/selectedTab", val);
+      },
+    });
 
+    return {
+      tabInput,
+    };
+  },
   computed: {
     resultQuery() {
       if (this.searchQuery) {
@@ -130,6 +140,7 @@ export default {
   },
   mounted() {
     this.callApi();
+    console.log(this.tabInput);
   },
   methods: {
     callApi() {
@@ -168,7 +179,6 @@ export default {
         if (tabInput == 4) {
           this.selectedLink = this.url + this.kidsMovie + this.apiKey;
         }
-        console.log("tab input value= ", this.tabInput);
         this.callApi();
         return this.selectedLink;
       }
