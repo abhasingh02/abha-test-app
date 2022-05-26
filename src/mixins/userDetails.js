@@ -1,5 +1,4 @@
 import { uid } from "quasar";
-
 let userId = uid();
 export default {
   data() {
@@ -14,6 +13,7 @@ export default {
         gender: "",
         address: "",
       },
+      // loginUserId: "",
       oldUser: false,
       savedDetails: JSON.parse(localStorage.getItem("data")),
       loginUser: "",
@@ -34,9 +34,6 @@ export default {
     },
 
     isNew(newDetail) {
-      // console.log(this.oldUser);
-      console.log(this.savedDetails);
-      // console.log(newDetail);
       if (this.savedDetails != (null || undefined)) {
         this.loginUser = this.savedDetails.find(
           (x) => x.email == newDetail.email
@@ -53,8 +50,6 @@ export default {
         (x) => x.id == editUserId
       );
       console.log(editUserIndex);
-      // localStorage.setItem("loginUser", JSON.stringify(this.savedLoginUser));
-      // this.savedDetails[editUserIndex] = this.savedLoginUser;
       this.savedDetails[editUserIndex] = editUser;
       console.log(this.editUser);
       console.log(this.savedDetails);
