@@ -10,11 +10,11 @@
       />
     </q-page-container>
 
-    <q-footer elevated class="bg-primary text-white">
+    <!-- <q-footer elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title> </q-toolbar-title>
       </q-toolbar>
-    </q-footer>
+    </q-footer> -->
   </q-layout>
 </template>
 
