@@ -60,10 +60,10 @@
               v-close-popup
               v-for="i in 12"
               :key="i"
-              @click="selectedYear(i)"
+              @click="selectedYear(getYear1 - i + 1)"
             >
               <q-item-section>
-                <q-item-label>{{ i + 2010 }} </q-item-label>
+                <q-item-label>{{ getYear1 - i + 1 }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -94,6 +94,7 @@
 </template>
 
 <script>
+import { date } from "quasar";
 import APILinks from "../mixins/APILinks";
 import { computed } from "vue";
 import { useStore } from "vuex";
@@ -130,6 +131,11 @@ export default {
     };
   },
   computed: {
+    getYear1() {
+      const timeStamp = Date.now();
+      const formattedString = date.formatDate(timeStamp, "YYYY");
+      return formattedString;
+    },
     resultQuery() {
       if (this.searchQuery) {
         return this.resources.filter((item) => {
@@ -174,8 +180,9 @@ export default {
       }
     },
     selectedYear(selYear) {
-      if (this.selYear - 2010 != selYear) {
-        this.selYear = selYear + 2010; //change in store
+      // console.log(selYear);
+      if (this.selYear != selYear) {
+        this.selYear = selYear; //change in store
         this.callApi(this.setLink(4, this.selYear));
       }
     },

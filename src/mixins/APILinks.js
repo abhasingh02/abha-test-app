@@ -13,8 +13,8 @@ export default {
 
       yearBest1: "/discover/movie?primary_release_year=",
       yearBest2: "&sort_by=vote_average.desc&",
-      selectedLink:
-        "https://api.themoviedb.org/4/list/1?api_key=cc9258a8e7cdd13082a808f2da68d5ad",
+      selectedLink: "",
+      // "https://api.themoviedb.org/4/list/1?api_key=cc9258a8e7cdd13082a808f2da68d5ad",
     };
   },
   methods: {
