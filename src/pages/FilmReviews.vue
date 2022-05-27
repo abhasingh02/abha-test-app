@@ -15,7 +15,6 @@
           v-model="searchQuery"
           ><template v-slot:append> <q-icon name="search" /> </template
         ></q-input>
-        <!-- <div class="row"> -->
         <q-tabs
           inline-label
           outside-arrows
