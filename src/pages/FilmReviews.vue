@@ -6,68 +6,72 @@
       routePath="/dashboard"
     ></custom-header>
     <q-page-container class="my-card">
-      <!-- <q-slide-item @left="onLeft" @right="onRight">
-        <template v-slot:left>
-          <q-btn>hello1</q-btn>
-         <q-icon name="donq-btne" />
-        </template>
-
-        <q-item>
-          <q-btn>hello2</q-btn>
-        </q-item>
-      </q-slide-item> -->
-      <q-input
-        class="col-5"
-        bottom-slots
-        outlined
-        placeholder="Enter movie name"
-        v-model="searchQuery"
-        ><template v-slot:append> <q-icon name="search" /> </template
-      ></q-input>
       <div class="q-pa-md q-gutter-sm">
-        <q-btn
-          :color="tabInput == 0 ? 'teal' : 'primary'"
-          label="All movies"
+        <q-input
           class="col"
-          @click="selectLink(0)"
-        />
-        <q-btn
-          :color="tabInput == 1 ? 'teal' : 'primary'"
-          label="Popular movies"
-          class="col"
-          @click="selectLink(1)"
-        />
-        <q-btn
-          :color="tabInput == 2 ? 'teal' : 'primary'"
-          label="Highest rated movies"
-          class="col"
-          @click="selectLink(2)"
-        />
-        <q-btn
-          :color="tabInput == 3 ? 'teal' : 'primary'"
-          label="Kids movie"
-          class="col"
-          @click="selectLink(3)"
-        />
-        <q-btn-dropdown
-          :color="tabInput == 4 ? 'teal' : 'primary'"
-          @click="selectLink(4)"
-          label="Yearwise hit movies"
+          bottom-slots
+          outlined
+          placeholder="Enter movie name"
+          v-model="searchQuery"
+          ><template v-slot:append> <q-icon name="search" /> </template
+        ></q-input>
+        <q-tabs
+          inline-label
+          outside-arrows
+          mobile-arrows
+          class="bg-primary text-white shadow-2"
         >
-          <q-list>
-            <q-item
-              clickable
-              v-close-popup
-              v-for="i in 12"
-              :key="i"
-              @click="selectedYear(i)"
+          <q-tab
+            style="min-width: 180px"
+            :color="tabInput == 0 ? 'teal' : 'primary'"
+            label="All movies"
+            class="col"
+            @click="selectLink(0)"
+          />
+          <q-tab
+            style="min-width: 180px"
+            :color="tabInput == 1 ? 'teal' : 'primary'"
+            label="Popular movies"
+            class="col"
+            @click="selectLink(1)"
+          />
+          <q-tab
+            style="min-width: 180px"
+            :color="tabInput == 2 ? 'teal' : 'primary'"
+            label="Highest rated movies"
+            class="col"
+            @click="selectLink(2)"
+          />
+          <q-tab
+            style="min-width: 180px"
+            :color="tabInput == 3 ? 'teal' : 'primary'"
+            label="Kids movie"
+            class="col"
+            @click="selectLink(3)"
+          />
+          <q-tab>
+            <q-btn-dropdown
+              style="min-width: 180px"
+              flat
+              @click="selectLink(4)"
+              label="Yearwise hit movies"
             >
-              <q-item-section>
-                <q-item-label>{{ i + 2010 }} </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+              <q-list>
+                <q-item
+                  clickable
+                  v-close-popup
+                  v-for="i in 12"
+                  :key="i"
+                  @click="selectedYear(getYear1 - i + 1)"
+                >
+                  <q-item-section>
+                    <q-item-label>{{ getYear1 - i + 1 }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
+          </q-tab>
+        </q-tabs>
       </div>
       <div v-if="responseAvailable == true">
         <div class="text-h6 text-center">
@@ -94,6 +98,7 @@
 </template>
 
 <script>
+import { date } from "quasar";
 import APILinks from "../mixins/APILinks";
 import { computed } from "vue";
 import { useStore } from "vuex";
@@ -130,6 +135,11 @@ export default {
     };
   },
   computed: {
+    getYear1() {
+      const timeStamp = Date.now();
+      const formattedString = date.formatDate(timeStamp, "YYYY");
+      return formattedString;
+    },
     resultQuery() {
       if (this.searchQuery) {
         return this.resources.filter((item) => {
@@ -174,8 +184,9 @@ export default {
       }
     },
     selectedYear(selYear) {
-      if (this.selYear - 2010 != selYear) {
-        this.selYear = selYear + 2010; //change in store
+      // console.log(selYear);
+      if (this.selYear != selYear) {
+        this.selYear = selYear; //change in store
         this.callApi(this.setLink(4, this.selYear));
       }
     },
