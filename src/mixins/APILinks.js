@@ -18,19 +18,19 @@ export default {
   },
   methods: {
     setLink(tabIn, selYear) {
-      if (tabIn == 0) {
+      if (tabIn == "t_0") {
         this.selectedLink = this.url + this.listLink + this.apiKey;
       }
-      if (tabIn == 1) {
+      if (tabIn == "t_1") {
         this.selectedLink = this.url + this.popularMovieAPI + this.apiKey;
       }
-      if (tabIn == 2) {
+      if (tabIn == "t_2") {
         this.selectedLink = this.url + this.bestMovies + this.apiKey;
       }
-      if (tabIn == 3) {
+      if (tabIn == "t_3") {
         this.selectedLink = this.url + this.kidsMovie + this.apiKey;
       }
-      if (tabIn == 4) {
+      if (tabIn == "t_4") {
         this.selectedLink =
           this.url + this.yearBest1 + selYear + this.yearBest2 + this.apiKey;
       }

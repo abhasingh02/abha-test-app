@@ -16,66 +16,52 @@
           ><template v-slot:append> <q-icon name="search" /> </template
         ></q-input>
         <q-tabs
-          inline-label
           outside-arrows
           mobile-arrows
+          active-bg-color="teal"
+          indicator-color="transparent"
+          no-caps
+          ref="tabsVal"
+          v-model="tabIndexValueTREst"
           class="bg-primary text-white shadow-2"
         >
-          <q-tab
-            style="min-width: 180px"
-            :color="tabInput == 0 ? 'teal' : 'primary'"
-            label="All movies"
-            class="col"
-            @click="selectLink(0)"
-          />
-          <q-tab
-            style="min-width: 180px"
-            :color="tabInput == 1 ? 'teal' : 'primary'"
-            label="Popular movies"
-            class="col"
-            @click="selectLink(1)"
-          />
-          <q-tab
-            style="min-width: 180px"
-            :color="tabInput == 2 ? 'teal' : 'primary'"
-            label="Highest rated movies"
-            class="col"
-            @click="selectLink(2)"
-          />
-          <q-tab
-            style="min-width: 180px"
-            :color="tabInput == 3 ? 'teal' : 'primary'"
-            label="Kids movie"
-            class="col"
-            @click="selectLink(3)"
-          />
-          <q-tab>
-            <q-btn-dropdown
-              style="min-width: 180px"
-              flat
-              @click="selectLink(4)"
-              label="Yearwise hit movies"
-            >
-              <q-list>
-                <q-item
-                  clickable
-                  v-close-popup
-                  v-for="i in 12"
-                  :key="i"
-                  @click="selectedYear(getYear1 - i + 1)"
-                >
-                  <q-item-section>
-                    <q-item-label>{{ getYear1 - i + 1 }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-btn-dropdown>
-          </q-tab>
+          <q-tab name="t_0" label="All movies" />
+          <q-tab name="t_1" label="Popular movies" />
+          <q-tab name="t_2" label="Highest rated movies" />
+          <q-tab name="t_3" label="Kids movie" />
+
+          <q-btn-dropdown
+            auto-close
+            stretch
+            flat
+            name="t_4"
+            :style="
+              tabInput == 't_4'
+                ? 'background-color: teal'
+                : 'background-color: primary'
+            "
+            no-caps
+            label="Yearwise hit movies"
+          >
+            <q-list>
+              <q-item
+                clickable
+                v-close-popup
+                v-for="i in 12"
+                :key="i"
+                @click="selectedYear(getYear1 - i + 1)"
+              >
+                <q-item-section>
+                  <q-item-label>{{ getYear1 - i + 1 }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
         </q-tabs>
       </div>
       <div v-if="responseAvailable == true">
         <div class="text-h6 text-center">
-          <p v-if="tabInput === 4">Hit movies in year {{ selYear }}</p>
+          <p v-if="tabInput == 't_4'">Hit movies in year {{ selYear }}</p>
         </div>
 
         <div v-for="res in resultQuery" :key="res.id">
@@ -99,6 +85,7 @@
 
 <script>
 import { date } from "quasar";
+import { ref } from "vue";
 import APILinks from "../mixins/APILinks";
 import { computed } from "vue";
 import { useStore } from "vuex";
@@ -113,6 +100,7 @@ export default {
       responseAvailable: false,
       search: "",
       options: "",
+      tabIndexValueTREst: "",
     };
   },
   setup() {
@@ -155,7 +143,24 @@ export default {
   },
   mounted() {
     this.callApi(this.setLink(this.tabInput, this.selYear));
-    console.log(this.tabInput);
+    this.tabIndexValueTREst = this.tabInput;
+    console.log("selected tab: " + this.tabIndexValueTREst + this.tabInput);
+  },
+  watch: {
+    tabIndexValueTREst() {
+      console.log(this.tabInput);
+      console.log("clicked" + this.tabIndexValueTREst);
+      if (this.tabInput != this.tabIndexValueTREst) {
+        this.tabInput = this.tabIndexValueTREst; //change in store
+        console.log(this.tabInput);
+        this.callApi(this.setLink(this.tabInput));
+      }
+    },
+    // selYear() {
+    //   this.tabIndexValueTREst = "";
+    //   this.tabInput = "t_4";
+    //   this.callApi(this.setLink(this.tabInput, this.selYear));
+    // },
   },
   methods: {
     callApi(link) {
@@ -176,18 +181,13 @@ export default {
           console.error(error);
         });
     },
-    selectLink(tabIn) {
-      if (this.tabInput != tabIn) {
-        this.tabInput = tabIn; //change in store
-        this.callApi(this.setLink(tabIn));
-        // return this.selectedLink;
-      }
-    },
     selectedYear(selYear) {
-      // console.log(selYear);
+      this.tabIndexValueTREst = "";
+      console.log(selYear);
+      this.tabInput = "t_4";
       if (this.selYear != selYear) {
         this.selYear = selYear; //change in store
-        this.callApi(this.setLink(4, this.selYear));
+        this.callApi(this.setLink(this.tabInput, this.selYear));
       }
     },
     clicked(selMovie) {

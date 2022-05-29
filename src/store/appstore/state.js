@@ -1,7 +1,7 @@
 export default function () {
   return {
     count: 10,
-    tabSelected: 0,
+    tabSelected: "t_0",
     year: "",
   };
 }
