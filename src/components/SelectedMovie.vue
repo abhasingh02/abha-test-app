@@ -12,7 +12,7 @@
     <custom-header
       :header-title="selectedMovieName.original_title"
       routeName="Back"
-      routePath="/filmreviews"
+      routePath="/dashboard"
     ></custom-header>
 
     <q-page-container class="my-card">

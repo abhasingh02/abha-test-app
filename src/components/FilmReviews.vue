@@ -1,40 +1,38 @@
 <template>
-  <q-layout view="hHh lpR fFf">
-    <custom-header
+  <!-- <custom-header
       header-title="Film Reviews"
       routeName="Back"
       routePath="/dashboard"
-    ></custom-header>
-    <q-page-container class="my-card">
-      <div class="q-pa-md q-gutter-sm">
-        <q-input
-          class="col"
-          bottom-slots
-          outlined
-          placeholder="Enter movie name"
-          v-model="searchQuery"
-          ><template v-slot:append> <q-icon name="search" /> </template
-        ></q-input>
-        <q-tabs
-          outside-arrows
-          mobile-arrows
-          active-bg-color="teal"
-          indicator-color="transparent"
-          no-caps
-          ref="tabsVal"
-          v-model="tabIndexValueTREst"
-          class="bg-primary text-white shadow-2"
-        >
-          <q-tab name="t_0" label="All movies" />
-          <q-tab name="t_1" label="Popular movies" />
-          <q-tab name="t_2" label="Highest rated movies" />
-          <q-tab name="t_3" label="Kids movie" />
-
+    ></custom-header> -->
+  <q-page-container class="my-card">
+    <div class="q-pa-md q-gutter-sm">
+      <q-input
+        class="col"
+        bottom-slots
+        outlined
+        placeholder="Enter movie name"
+        v-model="searchQuery"
+        ><template v-slot:append> <q-icon name="search" /> </template
+      ></q-input>
+      <q-tabs
+        outside-arrows
+        mobile-arrows
+        active-bg-color="teal"
+        indicator-color="transparent"
+        no-caps
+        ref="tabsVal"
+        v-model="tabIndexValueTREst"
+        class="bg-primary text-white shadow-2"
+      >
+        <q-tab name="t_0" label="All movies" />
+        <q-tab name="t_1" label="Popular movies" />
+        <q-tab name="t_2" label="Highest rated movies" />
+        <q-tab name="t_3" label="Kids movie" />
+        <q-tab name="t_4">
           <q-btn-dropdown
             auto-close
             stretch
             flat
-            name="t_4"
             :style="
               tabInput == 't_4'
                 ? 'background-color: teal'
@@ -56,31 +54,32 @@
                 </q-item-section>
               </q-item>
             </q-list>
-          </q-btn-dropdown>
-        </q-tabs>
+          </q-btn-dropdown></q-tab
+        >
+      </q-tabs>
+    </div>
+    <div v-if="responseAvailable == true">
+      <div class="text-h6 text-center">
+        <p v-if="tabInput == 't_4'">Hit movies in year {{ selYear }}</p>
       </div>
-      <div v-if="responseAvailable == true">
-        <div class="text-h6 text-center">
-          <p v-if="tabInput == 't_4'">Hit movies in year {{ selYear }}</p>
-        </div>
 
-        <div v-for="res in resultQuery" :key="res.id">
-          <q-card @click="clicked(res)" class="my-card" bordered>
-            <q-card-section horizontal>
-              <q-separator vertical />
+      <div v-for="res in resultQuery" :key="res.id">
+        <q-card @click="clicked(res)" class="my-card" bordered>
+          <q-card-section horizontal>
+            <q-separator vertical />
 
-              <q-img class="col-5" :src="imgUrl + res.backdrop_path" />
-              <q-card-section>
-                <p>{{ res.original_title }}</p>
-                <p>{{ res.release_date }}</p>
-                <q-btn label="Play" color="primary" />
-              </q-card-section>
+            <q-img class="col-5" :src="imgUrl + res.backdrop_path" />
+            <q-card-section>
+              <p>{{ res.original_title }}</p>
+              <p>{{ res.release_date }}</p>
+              <q-btn label="Play" color="primary" />
             </q-card-section>
-          </q-card>
-        </div>
+          </q-card-section>
+        </q-card>
       </div>
-    </q-page-container>
-  </q-layout>
+    </div>
+  </q-page-container>
+  <!-- </q-layout> -->
 </template>
 
 <script>
@@ -89,10 +88,10 @@ import { ref } from "vue";
 import APILinks from "../mixins/APILinks";
 import { computed } from "vue";
 import { useStore } from "vuex";
-import customHeader from "src/components/customHeader.vue";
+// import customHeader from "src/components/customHeader.vue";
 export default {
   mixins: [APILinks],
-  components: { customHeader },
+  // components: { customHeader },
   data() {
     return {
       searchQuery: null,

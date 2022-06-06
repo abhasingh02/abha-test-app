@@ -55,7 +55,7 @@ const routes = [
   {
     path: "/filmreviews",
     name: "filmreviews",
-    component: () => import("src/pages/FilmReviews.vue"),
+    component: () => import("src/components/FilmReviews.vue"),
   },
   {
     path: "/selectedmovie",
