@@ -1,9 +1,4 @@
 <template>
-  <!-- <custom-header
-      header-title="Film Reviews"
-      routeName="Back"
-      routePath="/dashboard"
-    ></custom-header> -->
   <q-page-container class="my-card">
     <div class="q-pa-md q-gutter-sm">
       <q-input
@@ -21,7 +16,7 @@
         indicator-color="transparent"
         no-caps
         ref="tabsVal"
-        v-model="tabIndexValueTREst"
+        v-model="tabIndexValue"
         class="bg-primary text-white shadow-2"
       >
         <q-tab name="t_0" label="All movies" />
@@ -33,11 +28,6 @@
             auto-close
             stretch
             flat
-            :style="
-              tabInput == 't_4'
-                ? 'background-color: teal'
-                : 'background-color: primary'
-            "
             no-caps
             label="Yearwise hit movies"
           >
@@ -99,7 +89,7 @@ export default {
       responseAvailable: false,
       search: "",
       options: "",
-      tabIndexValueTREst: "",
+      tabIndexValue: "",
     };
   },
   setup() {
@@ -142,15 +132,15 @@ export default {
   },
   mounted() {
     this.callApi(this.setLink(this.tabInput, this.selYear));
-    this.tabIndexValueTREst = this.tabInput;
-    console.log("selected tab: " + this.tabIndexValueTREst + this.tabInput);
+    this.tabIndexValue = this.tabInput;
+    console.log("selected tab: " + this.tabIndexValue + this.tabInput);
   },
   watch: {
-    tabIndexValueTREst() {
+    tabIndexValue() {
       console.log(this.tabInput);
-      console.log("clicked" + this.tabIndexValueTREst);
-      if (this.tabInput != this.tabIndexValueTREst) {
-        this.tabInput = this.tabIndexValueTREst; //change in store
+      console.log("clicked" + this.tabIndexValue);
+      if (this.tabInput != this.tabIndexValue) {
+        this.tabInput = this.tabIndexValue; //change in store
         console.log(this.tabInput);
         this.callApi(this.setLink(this.tabInput));
       }
@@ -181,7 +171,7 @@ export default {
         });
     },
     selectedYear(selYear) {
-      this.tabIndexValueTREst = "";
+      // this.tabIndexValue = "";
       console.log(selYear);
       this.tabInput = "t_4";
       if (this.selYear != selYear) {

@@ -10,12 +10,6 @@
         label="Reviews"
       />
     </q-page-container> -->
-
-    <!-- <q-footer elevated class="bg-primary text-white">
-      <q-toolbar>
-        <q-toolbar-title> </q-toolbar-title>
-      </q-toolbar>
-    </q-footer> -->
   </q-layout>
 </template>
 
