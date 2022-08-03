@@ -2,18 +2,20 @@ export default {
   data() {
     return {
       url: "https://api.themoviedb.org/4",
-      apiKey: "api_key=cc9258a8e7cdd13082a808f2da68d5ad",
+      // apiKey: "api_key=cc9258a8e7cdd13082a808f2da68d5ad",
+      apiKey: "api_key=12b6e78ca3395639fe15c2a1763dccf0",
       listLink: "/list/1?",
       imgUrl: "https://image.tmdb.org/t/p/w500",
       popularMovieAPI: "/discover/movie?sort_by=popularity.desc&",
       kidsMovie:
-        "/discover/movie?certification_country=US&certification.lte=G&sort_by=popularity.desc&",
-      bestMovies:
-        "/discover/movie?primary_release_year=2020&sort_by=vote_average.desc&",
-
+        "/discover/movie?certification_country=IN&certification.lte=G&sort_by=popularity.desc&",
       yearBest1: "/discover/movie?primary_release_year=",
       yearBest2: "&sort_by=vote_average.desc&",
       selectedLink: "",
+      genreId:
+        "https://api.themoviedb.org/3/genre/tv/list?api_key=12b6e78ca3395639fe15c2a1763dccf0&language=en-US",
+      popularTV:
+        "https://api.themoviedb.org/4/discover/tv?sort_by=popularity.desc&api_key=12b6e78ca3395639fe15c2a1763dccf0",
     };
   },
   methods: {
@@ -25,7 +27,7 @@ export default {
         this.selectedLink = this.url + this.popularMovieAPI + this.apiKey;
       }
       if (tabIn == "t_2") {
-        this.selectedLink = this.url + this.bestMovies + this.apiKey;
+        this.selectedLink = this.genreId;
       }
       if (tabIn == "t_3") {
         this.selectedLink = this.url + this.kidsMovie + this.apiKey;
@@ -34,6 +36,10 @@ export default {
         this.selectedLink =
           this.url + this.yearBest1 + selYear + this.yearBest2 + this.apiKey;
       }
+      if (tabIn == "t_5") {
+        this.selectedLink = this.popularTV;
+      }
+
       return this.selectedLink;
     },
   },

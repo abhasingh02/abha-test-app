@@ -20,17 +20,13 @@
         class="bg-primary text-white shadow-2"
       >
         <q-tab name="t_0" label="All movies" />
+        <q-tab name="t_5" label="TV" />
         <q-tab name="t_1" label="Popular movies" />
-        <q-tab name="t_2" label="Highest rated movies" />
+        <!-- <q-tab name="t_2" label="Genres" /> -->
         <q-tab name="t_3" label="Kids movie" />
+
         <q-tab name="t_4">
-          <q-btn-dropdown
-            auto-close
-            stretch
-            flat
-            no-caps
-            label="Yearwise hit movies"
-          >
+          <q-btn-dropdown auto-close flat no-caps label="Yearwise hit movies">
             <q-list>
               <q-item
                 clickable
@@ -60,7 +56,9 @@
 
             <q-img class="col-5" :src="imgUrl + res.backdrop_path" />
             <q-card-section>
+              <p v-if="res.original_name">{{ res.original_name }}</p>
               <p>{{ res.original_title }}</p>
+              <p v-if="res.first_air_date">{{ res.first_air_date }}</p>
               <p>{{ res.release_date }}</p>
               <q-btn label="Play" color="primary" />
             </q-card-section>
@@ -133,23 +131,16 @@ export default {
   mounted() {
     this.callApi(this.setLink(this.tabInput, this.selYear));
     this.tabIndexValue = this.tabInput;
-    console.log("selected tab: " + this.tabIndexValue + this.tabInput);
+    // console.log("selected tab: " + this.tabIndexValue + this.tabInput);
   },
   watch: {
     tabIndexValue() {
-      console.log(this.tabInput);
-      console.log("clicked" + this.tabIndexValue);
+      // console.log("clicked " + this.tabIndexValue);
       if (this.tabInput != this.tabIndexValue) {
         this.tabInput = this.tabIndexValue; //change in store
-        console.log(this.tabInput);
         this.callApi(this.setLink(this.tabInput));
       }
     },
-    // selYear() {
-    //   this.tabIndexValueTREst = "";
-    //   this.tabInput = "t_4";
-    //   this.callApi(this.setLink(this.tabInput, this.selYear));
-    // },
   },
   methods: {
     callApi(link) {
@@ -164,15 +155,14 @@ export default {
           // console.log(response.data);
           this.responseAvailable = true;
           this.resources = response.data.results;
-          // console.log(this.resources);
+          console.log(this.resources);
         })
         .catch(function (error) {
           console.error(error);
         });
     },
     selectedYear(selYear) {
-      // this.tabIndexValue = "";
-      console.log(selYear);
+      // console.log(selYear);
       this.tabInput = "t_4";
       if (this.selYear != selYear) {
         this.selYear = selYear; //change in store
@@ -192,4 +182,4 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="sass" scoped></style>

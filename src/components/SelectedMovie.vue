@@ -20,7 +20,13 @@
         <!-- <q-card-section horizontal> -->
         <q-img class="col-5" :src="imgUrl + selectedMovieName.backdrop_path" />
         <q-card-section>
+          <p v-if="selectedMovieName.original_name" class="text-bold">
+            {{ selectedMovieName.original_name }}
+          </p>
           <p class="text-bold">{{ selectedMovieName.original_title }}</p>
+          <p v-if="selectedMovieName.first_air_date">
+            {{ selectedMovieName.first_air_date }}
+          </p>
           <p>{{ selectedMovieName.release_date }}</p>
           <p>
             Language:
@@ -68,7 +74,7 @@ export default {
       if (language == "sv") return "Swedish";
       if (language == "ja") return "Japanese";
       if (language == "fr") return "French";
-      // if (language == "ch") return "Chinese";
+      if (language == "cn") return "Chinese";
       if (language == "ko") return "Korean";
     },
     movieGenre(genreId) {
