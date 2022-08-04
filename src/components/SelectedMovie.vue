@@ -20,15 +20,21 @@
         <!-- <q-card-section horizontal> -->
         <q-img class="col-5" :src="imgUrl + selectedMovieName.backdrop_path" />
         <q-card-section>
+          <p class="text-bold">{{ selectedMovieName.original_title }}</p>
           <p v-if="selectedMovieName.original_name" class="text-bold">
             {{ selectedMovieName.name }}
           </p>
-          <p v-if="selectedMovieName.original_language != 'en'">
-            Original name in
-            {{ movieLanguage(selectedMovieName.original_language) }} language :
-            {{ selectedMovieName.original_name }}
+          <div v-if="selectedMovieName.origin_name">
+            <p v-if="selectedMovieName.original_language != 'en'">
+              Original name in
+              {{ movieLanguage(selectedMovieName.original_language) }} language
+              :
+              {{ selectedMovieName.original_name }}
+            </p>
+          </div>
+          <p v-if="selectedMovieName.origin_country">
+            Origin Country: {{ movieCountry(selectedMovieName.origin_country) }}
           </p>
-          <p class="text-bold">{{ selectedMovieName.original_title }}</p>
           <div v-if="selectedMovieName.first_air_date">
             <p>First Air Date: {{ selectedMovieName.first_air_date }}</p>
             <!-- <p>Total Episode: {{ selectedMovieName.networks   }}</p> -->
@@ -83,10 +89,12 @@ export default {
         { id: 878, name: " Science Fiction Movie" },
         { id: 9648, name: " Mystery" },
         { id: 10751, name: " Family" },
+        { id: 10759, name: " Action & Adventure" },
         { id: 10763, name: " News" },
         { id: 10764, name: " Reality" },
         { id: 10765, name: " Sci-Fi & Fantasy" },
         { id: 10766, name: " Soap" },
+        { id: 80, name: "Crime" },
       ],
       languageObj: [
         { acn: "en", Lang: "English" },
@@ -99,6 +107,15 @@ export default {
         { acn: "hi", lang: "Hindi" },
         { acn: "pt", lang: "Portuguese" },
         { acn: "tl", lang: "Tagalog" },
+        { acn: "es", name: "Spanish" },
+        { acn: "ru", name: "Russian" },
+      ],
+      countriesArray: [
+        { acn: "HK", name: "Hongkong" },
+        { acn: "US", name: "United State of America" },
+        { acn: "BR", name: "Brazil" },
+        { acn: "KR", name: "Korea" },
+        { acn: "AR", name: "Argentina" },
       ],
     };
   },
@@ -112,12 +129,19 @@ export default {
       return Object.values(languageName)[1];
     },
     movieGenre(genreId) {
+      if (genreId == "") return "NA";
       const genres = genreId.map((x) => {
         let genresVal = this.definedGenres.find((ele) => ele.id == x);
         if (genresVal == null) return "N\A";
         return genresVal.name;
       });
       return genres.toString();
+    },
+    movieCountry(country) {
+      console.log(country[0]);
+      let countryName = this.countriesArray.find((x) => x.acn == country[0]);
+      if (countryName == null) return "N\A";
+      return Object.values(countryName)[1];
     },
   },
 };
