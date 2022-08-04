@@ -59,6 +59,7 @@
               <p v-if="res.original_name">{{ res.original_name }}</p>
               <p>{{ res.original_title }}</p>
               <p v-if="res.first_air_date">{{ res.first_air_date }}</p>
+
               <p>{{ res.release_date }}</p>
               <q-btn label="Play" color="primary" />
             </q-card-section>
@@ -152,7 +153,7 @@ export default {
       axios
         .request(this.options)
         .then((response) => {
-          // console.log(response.data);
+          console.log(response.data);
           this.responseAvailable = true;
           this.resources = response.data.results;
           console.log(this.resources);
