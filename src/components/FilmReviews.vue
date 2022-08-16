@@ -45,10 +45,6 @@
       </q-tabs>
     </div>
     <div v-if="responseAvailable == true">
-      <div class="text-h6 text-center">
-        <p v-if="tabInput == 't_4'">Hit movies in year {{ selYear }}</p>
-      </div>
-
       <div v-for="res in resultQuery" :key="res.id">
         <q-card @click="clicked(res)" class="my-card" bordered>
           <q-card-section horizontal>
@@ -118,11 +114,16 @@ export default {
     },
     resultQuery() {
       if (this.searchQuery) {
+        // callApi(link);
         return this.resources.filter((item) => {
           return this.searchQuery
             .toLowerCase()
             .split(" ")
-            .every((v) => item.title.toLowerCase().includes(v));
+            .every((v) => {
+              if (item.title == null)
+                return item.name.toLowerCase().includes(v);
+              else return item.title.toLowerCase().includes(v);
+            });
         });
       } else {
         return this.resources;

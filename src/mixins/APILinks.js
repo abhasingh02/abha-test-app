@@ -14,8 +14,7 @@ export default {
       selectedLink: "",
       genreId:
         "https://api.themoviedb.org/3/genre/tv/list?api_key=12b6e78ca3395639fe15c2a1763dccf0&language=en-US",
-      popularTV:
-        "https://api.themoviedb.org/4/discover/tv?sort_by=popularity.desc&api_key=12b6e78ca3395639fe15c2a1763dccf0",
+      popularTV: "/discover/tv?sort_by=popularity.desc&",
     };
   },
   methods: {
@@ -26,9 +25,9 @@ export default {
       if (tabIn == "t_1") {
         this.selectedLink = this.url + this.popularMovieAPI + this.apiKey;
       }
-      if (tabIn == "t_2") {
-        this.selectedLink = this.genreId;
-      }
+      // if (tabIn == "t_2") {
+      //   this.selectedLink = this.genreId;
+      // }
       if (tabIn == "t_3") {
         this.selectedLink = this.url + this.kidsMovie + this.apiKey;
       }
@@ -37,7 +36,8 @@ export default {
           this.url + this.yearBest1 + selYear + this.yearBest2 + this.apiKey;
       }
       if (tabIn == "t_5") {
-        this.selectedLink = this.popularTV;
+        console.log("tv selected");
+        this.selectedLink = this.url + this.popularTV + this.apiKey;
       }
 
       return this.selectedLink;
