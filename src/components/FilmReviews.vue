@@ -17,12 +17,28 @@
         no-caps
         ref="tabsVal"
         v-model="tabIndexValue"
-        class="bg-primary text-white shadow-2"
+        class="col bg-primary text-white shadow-2"
       >
         <q-tab name="t_0" label="All movies" />
         <q-tab name="t_5" label="TV" />
         <q-tab name="t_1" label="Popular movies" />
-        <!-- <q-tab name="t_2" label="Genres" /> -->
+        <q-tab name="t_2">
+          <q-btn-dropdown auto-close flat no-caps label="Genre">
+            <q-list>
+              <q-item
+                clickable
+                v-close-popup
+                v-for="i in genreId.length"
+                :key="i"
+                @click="selectedGenre(i - 1)"
+              >
+                <q-item-section>
+                  <q-item-label>{{ genreId[i - 1].name }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown></q-tab
+        >
         <q-tab name="t_3" label="Kids movie" />
 
         <q-tab name="t_4">
@@ -44,6 +60,21 @@
         >
       </q-tabs>
     </div>
+    <!-- <p>{{ genreId.length }}</p> -->
+    <div class="my-card row" v-if="tabInput != 't_4' && tabInput != 't_2'">
+      <q-btn
+        class="col-1"
+        no-caps
+        flat
+        :disable="pageNo == 1"
+        @click="clickedPage(-1)"
+      >
+        &lt;&lt;
+      </q-btn>
+      <q-btn flat disable class="col-10 text-primary">{{ pageNo }}</q-btn>
+      <q-btn no-caps flat class="col-1" @click="clickedPage(+1)"> >></q-btn>
+      <!-- <span class="float-right" @click="pageNo++">Next</span> -->
+    </div>
     <div v-if="responseAvailable == true">
       <div v-for="res in resultQuery" :key="res.id">
         <q-card @click="clicked(res)" class="my-card" bordered>
@@ -64,7 +95,6 @@
       </div>
     </div>
   </q-page-container>
-  <!-- </q-layout> -->
 </template>
 
 <script>
@@ -73,6 +103,7 @@ import { ref } from "vue";
 import APILinks from "../mixins/APILinks";
 import { computed } from "vue";
 import { useStore } from "vuex";
+import appstore from "src/store/appstore";
 // import customHeader from "src/components/customHeader.vue";
 export default {
   mixins: [APILinks],
@@ -101,9 +132,23 @@ export default {
         $store.commit("appstore/updateYear", val);
       },
     });
+    const selGenre = computed({
+      get: () => $store.state.appstore.genre,
+      set: (val) => {
+        $store.commit("appstore/updateGenre", val);
+      },
+    });
+    const savedPage = computed({
+      get: () => $store.state.appstore.pPage,
+      set: (val) => {
+        $store.commit("appstore/savedPage", val);
+      },
+    });
     return {
       tabInput,
       selYear,
+      selGenre,
+      savedPage,
     };
   },
   computed: {
@@ -131,7 +176,11 @@ export default {
     },
   },
   mounted() {
-    this.callApi(this.setLink(this.tabInput, this.selYear));
+    this.pageNo = this.savedPage;
+    if (this.tabInput == "t_2") {
+      console.log("genre: " + this.selGenre);
+      this.callApi(this.setLink(this.tabInput, this.selGenre));
+    } else this.callApi(this.setLink(this.tabInput, this.selYear));
     this.tabIndexValue = this.tabInput;
     // console.log("selected tab: " + this.tabIndexValue + this.tabInput);
   },
@@ -139,6 +188,7 @@ export default {
     tabIndexValue() {
       // console.log("clicked " + this.tabIndexValue);
       if (this.tabInput != this.tabIndexValue) {
+        this.pageNo = this.savedPage = 1;
         this.tabInput = this.tabIndexValue; //change in store
         this.callApi(this.setLink(this.tabInput));
       }
@@ -154,9 +204,11 @@ export default {
       axios
         .request(this.options)
         .then((response) => {
-          console.log(response.data);
           this.responseAvailable = true;
-          this.resources = response.data.results;
+          // console.log("API data", response.data);
+          if (response.data.results != undefined)
+            this.resources = response.data.results;
+          else this.resources = response.data.items;
           console.log(this.resources);
         })
         .catch(function (error) {
@@ -171,6 +223,13 @@ export default {
         this.callApi(this.setLink(this.tabInput, this.selYear));
       }
     },
+    selectedGenre(gen) {
+      console.log(this.selGenre);
+      this.tabInput = "t_2";
+      let genId = this.genreId[gen].id;
+      this.selGenre = genId;
+      this.callApi(this.setLink(this.tabInput, this.selGenre));
+    },
     clicked(selMovie) {
       const sendData = JSON.stringify(selMovie);
       // console.log(selMovie);
@@ -179,6 +238,12 @@ export default {
         params: { data: sendData },
       });
       // console.log(selMovie.original_title);
+    },
+    clickedPage(whatToDo) {
+      this.pageNo = this.pageNo + whatToDo;
+      this.savedPage = this.pageNo;
+      // console.log(this.pageNo);
+      this.callApi(this.setLink(this.tabInput));
     },
   },
 };

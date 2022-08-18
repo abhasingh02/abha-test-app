@@ -9,3 +9,13 @@ export function selectedTab(state, tabId) {
 export function updateYear(state, selectedYear) {
   state.year = selectedYear;
 }
+
+export function updateGenre(state, genreId) {
+  console.log(genreId);
+  state.genre = genreId;
+}
+
+export function savedPage(state, pageNo) {
+  console.log("page: " + pageNo);
+  state.pPage = pageNo;
+}
