@@ -17,14 +17,29 @@
         no-caps
         ref="tabsVal"
         v-model="tabIndexValue"
-        class="bg-primary text-white shadow-2"
+        class="col bg-primary text-white shadow-2"
       >
         <q-tab name="t_0" label="All movies" />
         <q-tab name="t_5" label="TV" />
         <q-tab name="t_1" label="Popular movies" />
-        <!-- <q-tab name="t_2" label="Genres" /> -->
+        <q-tab name="t_2">
+          <q-btn-dropdown auto-close flat no-caps label="Genre">
+            <q-list>
+              <q-item
+                clickable
+                v-close-popup
+                v-for="i in genreId.length"
+                :key="i"
+                @click="selectedGenre(i - 1)"
+              >
+                <q-item-section>
+                  <q-item-label>{{ genreId[i - 1].name }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown></q-tab
+        >
         <q-tab name="t_3" label="Kids movie" />
-
         <q-tab name="t_4">
           <q-btn-dropdown auto-close flat no-caps label="Yearwise hit movies">
             <q-list>
@@ -43,6 +58,20 @@
           </q-btn-dropdown></q-tab
         >
       </q-tabs>
+    </div>
+    <div
+      class="q-pa-lg flex flex-center"
+      v-if="tabInput != 't_4' && tabInput != 't_2'"
+    >
+      <q-pagination
+        v-model="current"
+        color="teal"
+        :max="genreId.length"
+        :max-pages="6"
+        :boundary-numbers="false"
+        direction-links
+        @click="clickedPage(current)"
+      />
     </div>
     <div v-if="responseAvailable == true">
       <div v-for="res in resultQuery" :key="res.id">
@@ -64,7 +93,6 @@
       </div>
     </div>
   </q-page-container>
-  <!-- </q-layout> -->
 </template>
 
 <script>
@@ -73,6 +101,7 @@ import { ref } from "vue";
 import APILinks from "../mixins/APILinks";
 import { computed } from "vue";
 import { useStore } from "vuex";
+import appstore from "src/store/appstore";
 // import customHeader from "src/components/customHeader.vue";
 export default {
   mixins: [APILinks],
@@ -101,9 +130,24 @@ export default {
         $store.commit("appstore/updateYear", val);
       },
     });
+    const selGenre = computed({
+      get: () => $store.state.appstore.genre,
+      set: (val) => {
+        $store.commit("appstore/updateGenre", val);
+      },
+    });
+    const savedPage = computed({
+      get: () => $store.state.appstore.pPage,
+      set: (val) => {
+        $store.commit("appstore/savedPage", val);
+      },
+    });
     return {
+      current: ref(1),
       tabInput,
       selYear,
+      selGenre,
+      savedPage,
     };
   },
   computed: {
@@ -114,7 +158,9 @@ export default {
     },
     resultQuery() {
       if (this.searchQuery) {
-        // callApi(link);
+        // https://api.themoviedb.org/3/search/keyword?api_key=<<api_key>>&page=1
+        //  this.callApi()
+
         return this.resources.filter((item) => {
           return this.searchQuery
             .toLowerCase()
@@ -131,7 +177,11 @@ export default {
     },
   },
   mounted() {
-    this.callApi(this.setLink(this.tabInput, this.selYear));
+    this.current = this.pageNo = this.savedPage;
+    if (this.tabInput == "t_2") {
+      console.log("genre: " + this.selGenre);
+      this.callApi(this.setLink(this.tabInput, this.selGenre));
+    } else this.callApi(this.setLink(this.tabInput, this.selYear));
     this.tabIndexValue = this.tabInput;
     // console.log("selected tab: " + this.tabIndexValue + this.tabInput);
   },
@@ -139,6 +189,7 @@ export default {
     tabIndexValue() {
       // console.log("clicked " + this.tabIndexValue);
       if (this.tabInput != this.tabIndexValue) {
+        this.pageNo = this.savedPage = this.current = 1;
         this.tabInput = this.tabIndexValue; //change in store
         this.callApi(this.setLink(this.tabInput));
       }
@@ -154,14 +205,19 @@ export default {
       axios
         .request(this.options)
         .then((response) => {
-          console.log(response.data);
           this.responseAvailable = true;
-          this.resources = response.data.results;
+          // console.log("API data", response.data);
+          if (response.data.results != undefined)
+            this.resources = response.data.results;
+          else this.resources = response.data.items;
           console.log(this.resources);
         })
         .catch(function (error) {
           console.error(error);
         });
+    },
+    searchKeyword(val) {
+      console.log("value of input: " + val);
     },
     selectedYear(selYear) {
       // console.log(selYear);
@@ -171,6 +227,13 @@ export default {
         this.callApi(this.setLink(this.tabInput, this.selYear));
       }
     },
+    selectedGenre(gen) {
+      console.log(this.selGenre);
+      this.tabInput = "t_2";
+      let genId = this.genreId[gen].id;
+      this.selGenre = genId;
+      this.callApi(this.setLink(this.tabInput, this.selGenre));
+    },
     clicked(selMovie) {
       const sendData = JSON.stringify(selMovie);
       // console.log(selMovie);
@@ -179,6 +242,11 @@ export default {
         params: { data: sendData },
       });
       // console.log(selMovie.original_title);
+    },
+    clickedPage(current) {
+      this.savedPage = this.pageNo = current;
+      // console.log(this.pageNo);
+      this.callApi(this.setLink(this.tabInput));
     },
   },
 };

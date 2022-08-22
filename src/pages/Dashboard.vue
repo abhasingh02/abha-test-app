@@ -2,14 +2,6 @@
   <q-layout view="hHh lpR fFf">
     <custom-header header-title="Dashboard"></custom-header>
     <film-reviews></film-reviews>
-    <!-- <q-page-container>
-      <q-btn
-        class="absolute-center"
-        to="/filmreviews"
-        color="primary"
-        label="Reviews"
-      />
-    </q-page-container> -->
   </q-layout>
 </template>
 

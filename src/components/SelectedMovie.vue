@@ -69,54 +69,15 @@
 
 <script>
 import customHeader from "src/components/customHeader.vue";
+import APILinks from "../mixins/APILinks";
 export default {
   components: { customHeader },
   props: ["data"],
+  mixins: [APILinks],
   data() {
     return {
       selectedMovieName: JSON.parse(this.data),
       imgUrl: "https://image.tmdb.org/t/p/w500",
-      definedGenres: [
-        { id: 12, name: " Adventure" },
-        { id: 14, name: " Fantasy" },
-        { id: 16, name: " Animation" },
-        { id: 18, name: " Drama" },
-        { id: 27, name: " Horror" },
-        { id: 28, name: " Action" },
-        { id: 35, name: " Comedy" },
-        { id: 53, name: " Thriller" },
-        { id: 99, name: " Documentary" },
-        { id: 878, name: " Science Fiction Movie" },
-        { id: 9648, name: " Mystery" },
-        { id: 10751, name: " Family" },
-        { id: 10759, name: " Action & Adventure" },
-        { id: 10763, name: " News" },
-        { id: 10764, name: " Reality" },
-        { id: 10765, name: " Sci-Fi & Fantasy" },
-        { id: 10766, name: " Soap" },
-        { id: 80, name: "Crime" },
-      ],
-      languageObj: [
-        { acn: "en", Lang: "English" },
-        { acn: "sv", lang: "Swedish" },
-        { acn: "ja", lang: "Japanese" },
-        { acn: "fr", lang: "French" },
-        { acn: "cn", lang: "Chinese" },
-        { acn: "ko", lang: "Korean" },
-        { acn: "ar", lang: "Arabic" },
-        { acn: "hi", lang: "Hindi" },
-        { acn: "pt", lang: "Portuguese" },
-        { acn: "tl", lang: "Tagalog" },
-        { acn: "es", name: "Spanish" },
-        { acn: "ru", name: "Russian" },
-      ],
-      countriesArray: [
-        { acn: "HK", name: "Hongkong" },
-        { acn: "US", name: "United State of America" },
-        { acn: "BR", name: "Brazil" },
-        { acn: "KR", name: "Korea" },
-        { acn: "AR", name: "Argentina" },
-      ],
     };
   },
   mounted() {
@@ -131,7 +92,7 @@ export default {
     movieGenre(genreId) {
       if (genreId == "") return "NA";
       const genres = genreId.map((x) => {
-        let genresVal = this.definedGenres.find((ele) => ele.id == x);
+        let genresVal = this.genreId.find((ele) => ele.id == x);
         if (genresVal == null) return "N\A";
         return genresVal.name;
       });
