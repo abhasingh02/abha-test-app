@@ -23,7 +23,7 @@ export default {
   methods: {
     saveDetails(newDetail) {
       newDetail.id = userId;
-      debugger;
+
       if (this.savedDetails != (null || undefined)) {
         console.log(this.savedDetails);
         this.Users = this.savedDetails;

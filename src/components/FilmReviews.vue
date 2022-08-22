@@ -40,7 +40,6 @@
           </q-btn-dropdown></q-tab
         >
         <q-tab name="t_3" label="Kids movie" />
-
         <q-tab name="t_4">
           <q-btn-dropdown auto-close flat no-caps label="Yearwise hit movies">
             <q-list>
@@ -60,20 +59,19 @@
         >
       </q-tabs>
     </div>
-    <!-- <p>{{ genreId.length }}</p> -->
-    <div class="my-card row" v-if="tabInput != 't_4' && tabInput != 't_2'">
-      <q-btn
-        class="col-1"
-        no-caps
-        flat
-        :disable="pageNo == 1"
-        @click="clickedPage(-1)"
-      >
-        &lt;&lt;
-      </q-btn>
-      <q-btn flat disable class="col-10 text-primary">{{ pageNo }}</q-btn>
-      <q-btn no-caps flat class="col-1" @click="clickedPage(+1)"> >></q-btn>
-      <!-- <span class="float-right" @click="pageNo++">Next</span> -->
+    <div
+      class="q-pa-lg flex flex-center"
+      v-if="tabInput != 't_4' && tabInput != 't_2'"
+    >
+      <q-pagination
+        v-model="current"
+        color="teal"
+        :max="genreId.length"
+        :max-pages="6"
+        :boundary-numbers="false"
+        direction-links
+        @click="clickedPage(current)"
+      />
     </div>
     <div v-if="responseAvailable == true">
       <div v-for="res in resultQuery" :key="res.id">
@@ -145,6 +143,7 @@ export default {
       },
     });
     return {
+      current: ref(1),
       tabInput,
       selYear,
       selGenre,
@@ -159,7 +158,9 @@ export default {
     },
     resultQuery() {
       if (this.searchQuery) {
-        // callApi(link);
+        // https://api.themoviedb.org/3/search/keyword?api_key=<<api_key>>&page=1
+        //  this.callApi()
+
         return this.resources.filter((item) => {
           return this.searchQuery
             .toLowerCase()
@@ -176,7 +177,7 @@ export default {
     },
   },
   mounted() {
-    this.pageNo = this.savedPage;
+    this.current = this.pageNo = this.savedPage;
     if (this.tabInput == "t_2") {
       console.log("genre: " + this.selGenre);
       this.callApi(this.setLink(this.tabInput, this.selGenre));
@@ -188,7 +189,7 @@ export default {
     tabIndexValue() {
       // console.log("clicked " + this.tabIndexValue);
       if (this.tabInput != this.tabIndexValue) {
-        this.pageNo = this.savedPage = 1;
+        this.pageNo = this.savedPage = this.current = 1;
         this.tabInput = this.tabIndexValue; //change in store
         this.callApi(this.setLink(this.tabInput));
       }
@@ -215,6 +216,9 @@ export default {
           console.error(error);
         });
     },
+    searchKeyword(val) {
+      console.log("value of input: " + val);
+    },
     selectedYear(selYear) {
       // console.log(selYear);
       this.tabInput = "t_4";
@@ -239,9 +243,8 @@ export default {
       });
       // console.log(selMovie.original_title);
     },
-    clickedPage(whatToDo) {
-      this.pageNo = this.pageNo + whatToDo;
-      this.savedPage = this.pageNo;
+    clickedPage(current) {
+      this.savedPage = this.pageNo = current;
       // console.log(this.pageNo);
       this.callApi(this.setLink(this.tabInput));
     },
