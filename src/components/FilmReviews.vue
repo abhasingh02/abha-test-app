@@ -6,14 +6,14 @@
         bottom-slots
         outlined
         placeholder="Enter movie name"
-        @keydown.enter.prevent="searchKeyword()"
+        @keydown.enter="searchKeyword()"
         v-model="searchQuery"
         ><template v-slot:append> <q-icon name="search" /> </template
       ></q-input>
       <q-tabs
         outside-arrows
         mobile-arrows
-        active-bg-color="teal"
+        active-bg-color="red"
         indicator-color="transparent"
         no-caps
         ref="tabsVal"
