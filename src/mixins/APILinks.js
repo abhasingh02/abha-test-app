@@ -15,9 +15,8 @@ export default {
       sortByavg: "&sort_by=vote_average.desc",
       genreLink: "/discover/movie?with_genres=",
       popularTV: "/tv/popular?",
-      searchMovie: "/search/movie?",
-      searchTV: "/search/tv?",
-      inputQuery: "&language=en-US&page=1&include_adult=false&query=",
+      searchKey: "/search/multi?",
+      inputQuery: "&language=en-US&include_adult=false&query=",
       genreId: [
         { id: 27, name: " Horror" },
         { id: 10749, name: "Romance" },
@@ -105,7 +104,7 @@ export default {
         // &language=en-US&page=1&include_adult=false&query=s
         this.selectedLink =
           this.url +
-          this.searchMovie +
+          this.searchKey +
           this.apiKey +
           this.inputQuery +
           key +

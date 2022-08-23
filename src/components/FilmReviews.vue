@@ -74,6 +74,9 @@
         @click="clickedPage(current)"
       />
     </div>
+    <div class="q-pa-lg" v-if="searchedQuery && searchQuery">
+      Searched "{{ searchQuery }}"
+    </div>
     <div v-if="responseAvailable == true">
       <div v-for="res in resultQuery" :key="res.id">
         <q-card @click="clicked(res)" class="my-card" bordered>
@@ -110,6 +113,7 @@ export default {
   data() {
     return {
       searchQuery: null,
+      searchedQuery: false,
       resources: "",
       responseAvailable: false,
       search: "",
@@ -180,6 +184,7 @@ export default {
   },
   watch: {
     tabIndexValue() {
+      this.searchQuery = "";
       // console.log("clicked " + this.tabIndexValue);
       if (this.tabInput != this.tabIndexValue) {
         this.pageNo = this.savedPage = this.current = 1;
@@ -212,6 +217,7 @@ export default {
     searchKeyword() {
       this.tabIndexValue = "";
       this.inputValue = !this.inputValue;
+      this.searchedQuery = true;
     },
     selectedYear(selYear) {
       // console.log(selYear);
