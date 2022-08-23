@@ -6,6 +6,7 @@
         bottom-slots
         outlined
         placeholder="Enter movie name"
+        @keydown.enter.prevent="searchKeyword()"
         v-model="searchQuery"
         ><template v-slot:append> <q-icon name="search" /> </template
       ></q-input>
@@ -114,6 +115,7 @@ export default {
       search: "",
       options: "",
       tabIndexValue: "",
+      inputValue: false,
     };
   },
   setup() {
@@ -157,23 +159,14 @@ export default {
       return formattedString;
     },
     resultQuery() {
-      if (this.searchQuery) {
-        // https://api.themoviedb.org/3/search/keyword?api_key=<<api_key>>&page=1
-        //  this.callApi()
+      if (this.inputValue) {
+        console.log("input value= " + this.searchQuery);
 
-        return this.resources.filter((item) => {
-          return this.searchQuery
-            .toLowerCase()
-            .split(" ")
-            .every((v) => {
-              if (item.title == null)
-                return item.name.toLowerCase().includes(v);
-              else return item.title.toLowerCase().includes(v);
-            });
-        });
-      } else {
-        return this.resources;
+        this.callApi(this.setLink("inputValue", this.searchQuery));
+        this.searchKeyword();
       }
+
+      return this.resources;
     },
   },
   mounted() {
@@ -216,8 +209,9 @@ export default {
           console.error(error);
         });
     },
-    searchKeyword(val) {
-      console.log("value of input: " + val);
+    searchKeyword() {
+      this.tabIndexValue = "";
+      this.inputValue = !this.inputValue;
     },
     selectedYear(selYear) {
       // console.log(selYear);

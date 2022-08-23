@@ -15,30 +15,33 @@ export default {
       sortByavg: "&sort_by=vote_average.desc",
       genreLink: "/discover/movie?with_genres=",
       popularTV: "/tv/popular?",
+      searchMovie: "/search/movie?",
+      searchTV: "/search/tv?",
+      inputQuery: "&language=en-US&page=1&include_adult=false&query=",
       genreId: [
-        { id: 12, name: " Adventure" },
+        { id: 27, name: " Horror" },
+        { id: 10749, name: "Romance" },
+        { id: 10762, name: "Kids" },
+        { id: 35, name: " Comedy" },
+        { id: 10765, name: " Sci-Fi & Fantasy" },
+        { id: 10759, name: " Action & Adventure" },
         { id: 14, name: " Fantasy" },
         { id: 16, name: " Animation" },
         { id: 18, name: " Drama" },
-        { id: 27, name: " Horror" },
+        { id: 10751, name: " Family" },
         { id: 28, name: " Action" },
-        { id: 35, name: " Comedy" },
+        { id: 80, name: "Crime" },
+        { id: 9648, name: " Mystery" },
         { id: 36, name: "History" },
         { id: 37, name: "Western" },
         { id: 53, name: " Thriller" },
-        { id: 80, name: "Crime" },
         { id: 99, name: " Documentary" },
         { id: 878, name: " Science Fiction" },
-        { id: 9648, name: " Mystery" },
         { id: 10402, name: "Music" },
-        { id: 10749, name: "Romance" },
-        { id: 10751, name: " Family" },
         { id: 10752, name: "War" },
-        { id: 10759, name: " Action & Adventure" },
-        { id: 10762, name: "Kids" },
+        { id: 12, name: " Adventure" },
         { id: 10763, name: " News" },
         { id: 10764, name: " Reality" },
-        { id: 10765, name: " Sci-Fi & Fantasy" },
         { id: 10766, name: " Soap" },
         { id: 10767, name: "Talk" },
         { id: 10768, name: "War & Politics" },
@@ -53,6 +56,7 @@ export default {
         { acn: "ko", lang: "Korean" },
         { acn: "ar", lang: "Arabic" },
         { acn: "hi", lang: "Hindi" },
+        { acn: "te", lang: "Telugu" },
         { acn: "pt", lang: "Portuguese" },
         { acn: "tl", lang: "Tagalog" },
         { acn: "es", name: "Spanish" },
@@ -69,8 +73,8 @@ export default {
     };
   },
   methods: {
-    setLink(tabIn, no) {
-      // console.log("no. " + no);
+    setLink(tabIn, key) {
+      console.log("key: " + key);
       if (tabIn == "t_0") {
         this.selectedLink =
           this.url + this.listLink + this.pageNo + "?" + this.apiKey;
@@ -80,14 +84,14 @@ export default {
           this.url + this.popularMovieAPI + this.pageNo + "&" + this.apiKey;
       }
       if (tabIn == "t_2") {
-        this.selectedLink = this.url + this.genreLink + no + "&" + this.apiKey;
+        this.selectedLink = this.url + this.genreLink + key + "&" + this.apiKey;
       }
       if (tabIn == "t_3") {
         this.selectedLink =
           this.url + this.kidsMovie + this.pageNo + "&" + this.apiKey;
       }
       if (tabIn == "t_4") {
-        this.selectedLink = this.url + this.yearBest + no + "&" + this.apiKey;
+        this.selectedLink = this.url + this.yearBest + key + "&" + this.apiKey;
       }
       if (tabIn == "t_5") {
         this.selectedLink =
@@ -95,6 +99,17 @@ export default {
           this.popularTV +
           this.apiKey +
           "&language=en-US&page=" +
+          this.pageNo;
+      }
+      if (tabIn == "inputValue") {
+        // &language=en-US&page=1&include_adult=false&query=s
+        this.selectedLink =
+          this.url +
+          this.searchMovie +
+          this.apiKey +
+          this.inputQuery +
+          key +
+          "&page=" +
           this.pageNo;
       }
 

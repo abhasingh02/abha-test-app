@@ -1,5 +1,5 @@
 {
-  "name": "assign.test.app",
+  "name": "org.cordova.quasar.app",
   "displayName": "Tesp App",
   "version": "1.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
