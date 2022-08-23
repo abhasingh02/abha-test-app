@@ -6,7 +6,7 @@
         bottom-slots
         outlined
         placeholder="Enter movie name"
-        @keydown.enter="searchKeyword()"
+        @keydown.enter.prevent="searchKeyword(searchQuery)"
         v-model="searchQuery"
         ><template v-slot:append> <q-icon name="search" /> </template
       ></q-input>
@@ -165,8 +165,7 @@ export default {
     resultQuery() {
       if (this.inputValue) {
         console.log("input value= " + this.searchQuery);
-
-        this.callApi(this.setLink("inputValue", this.searchQuery));
+        this.callApi(this.setLink(this.tabInput, this.searchQuery));
         this.searchKeyword();
       }
 
@@ -176,7 +175,7 @@ export default {
   mounted() {
     this.current = this.pageNo = this.savedPage;
     if (this.tabInput == "t_2") {
-      console.log("genre: " + this.selGenre);
+      // console.log("genre: " + this.selGenre);
       this.callApi(this.setLink(this.tabInput, this.selGenre));
     } else this.callApi(this.setLink(this.tabInput, this.selYear));
     this.tabIndexValue = this.tabInput;
@@ -184,8 +183,8 @@ export default {
   },
   watch: {
     tabIndexValue() {
-      this.searchQuery = "";
       // console.log("clicked " + this.tabIndexValue);
+      if (this.tabIndexValue != "t_in") this.searchQuery = "";
       if (this.tabInput != this.tabIndexValue) {
         this.pageNo = this.savedPage = this.current = 1;
         this.tabInput = this.tabIndexValue; //change in store
@@ -215,9 +214,11 @@ export default {
         });
     },
     searchKeyword() {
-      this.tabIndexValue = "";
       this.inputValue = !this.inputValue;
       this.searchedQuery = true;
+      this.tabIndexValue = "t_in";
+      this.tabInput = this.tabIndexValue;
+      console.log("entered");
     },
     selectedYear(selYear) {
       // console.log(selYear);
@@ -245,6 +246,9 @@ export default {
     },
     clickedPage(current) {
       this.savedPage = this.pageNo = current;
+      this.tabInput = this.tabIndexValue;
+      if (this.tabInput == "t_in")
+        this.callApi(this.setLink(this.tabInput, this.searchQuery));
       // console.log(this.pageNo);
       this.callApi(this.setLink(this.tabInput));
     },

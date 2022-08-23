@@ -61,6 +61,7 @@ export default {
         { acn: "es", name: "Spanish" },
         { acn: "ru", name: "Russian" },
         { acn: "tr", name: "Turkey" },
+        { acn: "pl", name: "Polish" },
       ],
       countriesArray: [
         { acn: "HK", name: "Hongkong" },
@@ -100,7 +101,7 @@ export default {
           "&language=en-US&page=" +
           this.pageNo;
       }
-      if (tabIn == "inputValue") {
+      if (tabIn == "t_in") {
         // &language=en-US&page=1&include_adult=false&query=s
         this.selectedLink =
           this.url +
