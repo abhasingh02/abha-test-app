@@ -13,7 +13,7 @@
       <q-tabs
         outside-arrows
         mobile-arrows
-        active-bg-color="red"
+        active-bg-color="teal"
         indicator-color="transparent"
         no-caps
         ref="tabsVal"
@@ -60,10 +60,7 @@
         >
       </q-tabs>
     </div>
-    <div
-      class="q-pa-lg flex flex-center"
-      v-if="tabInput != 't_4' && tabInput != 't_2'"
-    >
+    <div class="q-pa-lg flex flex-center">
       <q-pagination
         v-model="current"
         color="teal"
@@ -224,14 +221,18 @@ export default {
       // console.log(selYear);
       this.tabInput = "t_4";
       if (this.selYear != selYear) {
+        this.pageNo = this.savedPage = this.current = 1;
         this.selYear = selYear; //change in store
         this.callApi(this.setLink(this.tabInput, this.selYear));
       }
     },
     selectedGenre(gen) {
-      console.log(this.selGenre);
+      console.log("selected genre: " + this.selGenre);
       this.tabInput = "t_2";
       let genId = this.genreId[gen].id;
+      if (this.selGenre != genId) {
+        this.pageNo = this.savedPage = this.current = 1;
+      }
       this.selGenre = genId;
       this.callApi(this.setLink(this.tabInput, this.selGenre));
     },
@@ -246,11 +247,15 @@ export default {
     },
     clickedPage(current) {
       this.savedPage = this.pageNo = current;
+      // console.log(this.pageNo);
       this.tabInput = this.tabIndexValue;
       if (this.tabInput == "t_in")
         this.callApi(this.setLink(this.tabInput, this.searchQuery));
-      // console.log(this.pageNo);
-      this.callApi(this.setLink(this.tabInput));
+      if (this.tabInput == "t_2")
+        this.callApi(this.setLink(this.tabInput, this.selGenre));
+      if (this.tabInput == "t_4")
+        this.callApi(this.setLink(this.tabInput, this.selYear));
+      else this.callApi(this.setLink(this.tabInput));
     },
   },
 };

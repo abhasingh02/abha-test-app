@@ -84,14 +84,28 @@ export default {
           this.url + this.popularMovieAPI + this.pageNo + "&" + this.apiKey;
       }
       if (tabIn == "t_2") {
-        this.selectedLink = this.url + this.genreLink + key + "&" + this.apiKey;
+        this.selectedLink =
+          this.url +
+          this.genreLink +
+          key +
+          "&" +
+          this.apiKey +
+          "&page=" +
+          this.pageNo;
       }
       if (tabIn == "t_3") {
         this.selectedLink =
           this.url + this.kidsMovie + this.pageNo + "&" + this.apiKey;
       }
       if (tabIn == "t_4") {
-        this.selectedLink = this.url + this.yearBest + key + "&" + this.apiKey;
+        this.selectedLink =
+          this.url +
+          this.yearBest +
+          key +
+          "&" +
+          this.apiKey +
+          "&page=1" +
+          this.pageNo;
       }
       if (tabIn == "t_5") {
         this.selectedLink =
