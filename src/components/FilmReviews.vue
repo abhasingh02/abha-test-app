@@ -6,6 +6,7 @@
         bottom-slots
         outlined
         placeholder="Enter movie name"
+        @keydown.enter.prevent="searchKeyword(searchQuery)"
         v-model="searchQuery"
         ><template v-slot:append> <q-icon name="search" /> </template
       ></q-input>
@@ -59,10 +60,7 @@
         >
       </q-tabs>
     </div>
-    <div
-      class="q-pa-lg flex flex-center"
-      v-if="tabInput != 't_4' && tabInput != 't_2'"
-    >
+    <div class="q-pa-lg flex flex-center">
       <q-pagination
         v-model="current"
         color="teal"
@@ -72,6 +70,9 @@
         direction-links
         @click="clickedPage(current)"
       />
+    </div>
+    <div class="q-pa-lg" v-if="searchedQuery && searchQuery">
+      Searched "{{ searchQuery }}"
     </div>
     <div v-if="responseAvailable == true">
       <div v-for="res in resultQuery" :key="res.id">
@@ -109,11 +110,13 @@ export default {
   data() {
     return {
       searchQuery: null,
+      searchedQuery: false,
       resources: "",
       responseAvailable: false,
       search: "",
       options: "",
       tabIndexValue: "",
+      inputValue: false,
     };
   },
   setup() {
@@ -157,29 +160,19 @@ export default {
       return formattedString;
     },
     resultQuery() {
-      if (this.searchQuery) {
-        // https://api.themoviedb.org/3/search/keyword?api_key=<<api_key>>&page=1
-        //  this.callApi()
-
-        return this.resources.filter((item) => {
-          return this.searchQuery
-            .toLowerCase()
-            .split(" ")
-            .every((v) => {
-              if (item.title == null)
-                return item.name.toLowerCase().includes(v);
-              else return item.title.toLowerCase().includes(v);
-            });
-        });
-      } else {
-        return this.resources;
+      if (this.inputValue) {
+        console.log("input value= " + this.searchQuery);
+        this.callApi(this.setLink(this.tabInput, this.searchQuery));
+        this.searchKeyword();
       }
+
+      return this.resources;
     },
   },
   mounted() {
     this.current = this.pageNo = this.savedPage;
     if (this.tabInput == "t_2") {
-      console.log("genre: " + this.selGenre);
+      // console.log("genre: " + this.selGenre);
       this.callApi(this.setLink(this.tabInput, this.selGenre));
     } else this.callApi(this.setLink(this.tabInput, this.selYear));
     this.tabIndexValue = this.tabInput;
@@ -188,6 +181,7 @@ export default {
   watch: {
     tabIndexValue() {
       // console.log("clicked " + this.tabIndexValue);
+      if (this.tabIndexValue != "t_in") this.searchQuery = "";
       if (this.tabInput != this.tabIndexValue) {
         this.pageNo = this.savedPage = this.current = 1;
         this.tabInput = this.tabIndexValue; //change in store
@@ -216,21 +210,29 @@ export default {
           console.error(error);
         });
     },
-    searchKeyword(val) {
-      console.log("value of input: " + val);
+    searchKeyword() {
+      this.inputValue = !this.inputValue;
+      this.searchedQuery = true;
+      this.tabIndexValue = "t_in";
+      this.tabInput = this.tabIndexValue;
+      console.log("entered");
     },
     selectedYear(selYear) {
       // console.log(selYear);
       this.tabInput = "t_4";
       if (this.selYear != selYear) {
+        this.pageNo = this.savedPage = this.current = 1;
         this.selYear = selYear; //change in store
         this.callApi(this.setLink(this.tabInput, this.selYear));
       }
     },
     selectedGenre(gen) {
-      console.log(this.selGenre);
+      console.log("selected genre: " + this.selGenre);
       this.tabInput = "t_2";
       let genId = this.genreId[gen].id;
+      if (this.selGenre != genId) {
+        this.pageNo = this.savedPage = this.current = 1;
+      }
       this.selGenre = genId;
       this.callApi(this.setLink(this.tabInput, this.selGenre));
     },
@@ -246,7 +248,14 @@ export default {
     clickedPage(current) {
       this.savedPage = this.pageNo = current;
       // console.log(this.pageNo);
-      this.callApi(this.setLink(this.tabInput));
+      this.tabInput = this.tabIndexValue;
+      if (this.tabInput == "t_in")
+        this.callApi(this.setLink(this.tabInput, this.searchQuery));
+      if (this.tabInput == "t_2")
+        this.callApi(this.setLink(this.tabInput, this.selGenre));
+      if (this.tabInput == "t_4")
+        this.callApi(this.setLink(this.tabInput, this.selYear));
+      else this.callApi(this.setLink(this.tabInput));
     },
   },
 };
