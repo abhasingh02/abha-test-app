@@ -5,5 +5,6 @@ export default function () {
     year: "",
     genre: "",
     pPage: 1,
+    queryVal: "",
   };
 }

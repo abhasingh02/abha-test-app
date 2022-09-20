@@ -145,12 +145,19 @@ export default {
         $store.commit("appstore/savedPage", val);
       },
     });
+    const savedQuery = computed({
+      get: () => $store.state.appstore.queryVal,
+      set: (val) => {
+        $store.commit("appstore/updateQuery", val);
+      },
+    });
     return {
       current: ref(1),
       tabInput,
       selYear,
       selGenre,
       savedPage,
+      savedQuery,
     };
   },
   computed: {
@@ -171,6 +178,11 @@ export default {
   },
   mounted() {
     this.current = this.pageNo = this.savedPage;
+    if (this.tabInput == "t_in") {
+      this.searchedQuery = true;
+      this.searchQuery = this.savedQuery;
+      this.callApi(this.setLink(this.tabInput, this.savedQuery));
+    }
     if (this.tabInput == "t_2") {
       // console.log("genre: " + this.selGenre);
       this.callApi(this.setLink(this.tabInput, this.selGenre));
@@ -216,6 +228,8 @@ export default {
       this.tabIndexValue = "t_in";
       this.tabInput = this.tabIndexValue;
       console.log("entered");
+      this.savedQuery = this.searchQuery;
+      console.log("saved query= ", this.savedQuery);
     },
     selectedYear(selYear) {
       // console.log(selYear);

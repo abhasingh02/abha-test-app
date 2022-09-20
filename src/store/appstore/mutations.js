@@ -19,3 +19,8 @@ export function savedPage(state, pageNo) {
   console.log("page: " + pageNo);
   state.pPage = pageNo;
 }
+
+export function updateQuery(state, newQuery) {
+  console.log("query:", newQuery);
+  state.queryVal = newQuery;
+}
