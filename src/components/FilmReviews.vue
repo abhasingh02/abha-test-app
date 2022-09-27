@@ -8,7 +8,14 @@
         placeholder="Enter movie name"
         @keydown.enter.prevent="searchKeyword(searchQuery)"
         v-model="searchQuery"
-        ><template v-slot:append> <q-icon name="search" /> </template
+        ><template v-slot:append>
+          <q-icon v-if="searchQuery == ''" name="search" />
+          <q-icon
+            v-if="searchQuery != ''"
+            name="close"
+            @click="tabIndexValue = 't_0'"
+            class="cursor-pointer"
+          /> </template
       ></q-input>
       <q-tabs
         outside-arrows
@@ -192,7 +199,7 @@ export default {
   },
   watch: {
     tabIndexValue() {
-      // console.log("clicked " + this.tabIndexValue);
+      console.log("clicked " + this.tabIndexValue);
       if (this.tabIndexValue != "t_in") this.searchQuery = "";
       if (this.tabInput != this.tabIndexValue) {
         this.pageNo = this.savedPage = this.current = 1;
@@ -227,9 +234,9 @@ export default {
       this.searchedQuery = true;
       this.tabIndexValue = "t_in";
       this.tabInput = this.tabIndexValue;
-      console.log("entered");
+      // console.log("entered");
       this.savedQuery = this.searchQuery;
-      console.log("saved query= ", this.savedQuery);
+      // console.log("saved query= ", this.savedQuery);
     },
     selectedYear(selYear) {
       // console.log(selYear);
