@@ -48,7 +48,7 @@
           </p>
           <p>Genre: {{ movieGenre(selectedMovieName.genre_ids) }}</p>
           <p>
-            Kids Movie: <slot v-if="!selectedMovieName.adult">Yes</slot>
+            Adult Movie: <slot v-if="selectedMovieName.adult">Yes</slot>
             <slot v-else>No</slot>
           </p>
           <p>
@@ -82,6 +82,7 @@ export default {
   },
   mounted() {
     console.log(this.selectedMovieName);
+    console.log(window.screen.availHeight + " " + window.screen.availWidth);
   },
   methods: {
     movieLanguage(language) {
